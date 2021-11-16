@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head.ejs') %>
+</head>
+
+<body>
+    <%- include('./partials/nav.ejs') %>
+    <div class="create-blog content">
+        <form action="/blogs" method="POST">
+            <label for="title">Blog title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="snippet">Blog snippet:</label>
+            <input type="text" id="snippet" name="snippet" required>
+
+            <label for="body">Blog content</label>
+            <textarea name="body" id="body" cols="30" rows="10" required></textarea>
+
+            <button>Submit</button>
+        </form>
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+</body>
+
+<script>
+    var AJAX = function (ways, url, isasync) {
+        return new Promise((resolve, reject) => {
+            let req = new XMLHttpRequest();
+            req.open(`${ways}`, `${url}`, `${isasync}`)
+            req.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    resolve(this.responseText);
+                }
+            };
+            req.onerror = function () {
+                reject(new Error(req.statusText));
+            };
+            req.send();
+        })
+    }
+
+    async function getuserName() {
+        let message = await AJAX('GET', '/information/username', 'true');
+        console.log(JSON.parse(message));
+    }
+
+
+    window.onload = function () {
+        getuserName()
+    }
+</script>
+
+</html>
